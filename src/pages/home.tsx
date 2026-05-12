@@ -1,5 +1,5 @@
 // src/pages/home.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 // --- IMPORT DE VOS PHOTOS PERSONNELLES ---
 import imgEquipe from "../assets/equipe.png"; 
 import photoDianfe from "../assets/dianfe.png";
@@ -46,7 +46,7 @@ const SERVICES_DATA = [
 export default function home() {
     
  // --- STATES ---
-const [scrolled, setScrolled] = useState(false);
+const [scrolled] = useState(false);
 const [submissionData, setSubmissionData] = useState<any>(null);
 const [selectedService, setSelectedService] = useState<any>(null);
 const [isSubmitted, setIsSubmitted] = useState(false); // <--- AJOUTE ÇA ICI
