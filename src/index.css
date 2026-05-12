@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Définition du mouvement de flottaison */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Classe à appliquer aux écritures */
+.floating-text {
+  animation: float 3s ease-in-out infinite;
+  display: inline-block; /* Important pour que l'animation fonctionne bien */
+}
+html {
+  scroll-behavior: smooth;
+}
