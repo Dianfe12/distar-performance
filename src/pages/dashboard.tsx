@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function StatCard({ label, value, change }: { label: string; value: string; change: string }) {
