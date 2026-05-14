@@ -236,28 +236,7 @@ const handlePostuler = (e: React.FormEvent) => {
   </div>
 )}
 
-      {/* RÉSULTATS */}
-      <section id="resultats" style={{ padding: '100px 50px' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '3rem', fontWeight: '900', marginBottom: '60px' }}>VOS <span style={{ color: theme.orange }}>RÉSULTATS</span></h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '30px' }}>
-          {[
-            { nom: 'MARC, 28 ANS', coaching: 'Prise de masse Elite', result: '+8kg de muscle', imgAvant: imgOmarAvant, imgApres: imgOmarApres },
-            { nom: 'SOPHIE, 34 ANS', coaching: 'Perte de gras', result: '-12kg', imgAvant: imgRamaAvant, imgApres: imgRamaApres },
-            { nom: 'KEVIN, 22 ANS', coaching: 'Préparation Athlétique', result: 'Force x2', imgAvant: imgDianfeAvant, imgApres: imgDianfeApres }
-          ].map((res, i) => (
-            <div key={i} className="floating-text" style={{ backgroundColor: theme.gray, padding: '20px', borderRadius: '8px' }}>
-              <div style={{ display: 'flex', height: '250px', marginBottom: '20px', overflow: 'hidden' }}>
-                <img src={res.imgAvant} alt="Avant" style={{ width: '50%', objectFit: 'cover', borderRight: '1px solid #000' }} />
-                <img src={res.imgApres} alt="Après" style={{ width: '50%', objectFit: 'cover' }} />
-              </div>
-              <h3>{res.nom}</h3>
-              <p style={{ color: theme.orange, fontWeight: '700' }}>{res.coaching}</p>
-              <p style={{ color: '#aaa' }}>{res.result}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
+  
       {/* ÉQUIPE */}
       <section id="equipe" style={{ padding: '100px 50px', backgroundColor: theme.gray }}>
         <h2 style={{ textAlign: 'center', fontSize: '3rem', fontWeight: '900', marginBottom: '60px' }}>VOS <span style={{ color: theme.orange }}>COACHS</span></h2>
