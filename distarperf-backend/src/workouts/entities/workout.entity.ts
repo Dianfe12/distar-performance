@@ -2,21 +2,21 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } f
 import { User } from '../../users/entities/user.entity';
 
 @Entity('workouts')
-export class Workout {
+export class WorkoutSession {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column()
   titre!: string;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
+  @Column()
+  description!: string;
 
- @Column({ type: 'json', nullable: true })
-  exercices?: any;
+  @Column({ default: false })
+  isCompleted!: boolean;
 
-  @ManyToOne(() => User, { onDelete: 'CASCADE' })
-  user!: User;
+  @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: true })
+  user?: User;
 
   @CreateDateColumn()
   createdAt!: Date;

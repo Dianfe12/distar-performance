@@ -1,156 +1,141 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-function StatCard({ label, value, change }: { label: string; value: string; change: string }) {
-  return (
-    <div style={{ backgroundColor: '#161616', padding: '25px', borderRadius: '15px', borderBottom: '4px solid #FF5F00' }}>
-      <p style={{ color: '#888', marginBottom: '10px', fontSize: '0.9rem' }}>{label}</p>
-      <h2 style={{ fontSize: '2rem', margin: 0 }}>{value}</h2>
-      <p style={{ color: '#FF5F00', fontSize: '0.8rem', marginTop: '5px' }}>{change} ce mois-ci</p>
-    </div>
-  );
-}
-
-function ExerciseItem({ name, sets }: { name: string; sets: string }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #222' }}>
-      <span style={{ fontWeight: 'bold' }}>{name}</span>
-      <span style={{ color: '#888' }}>{sets}</span>
-    </div>
-  );
-}
+import API from '../services/api';
+import Header from '../components/Header';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const userLevel = localStorage.getItem('userLevel') || 'Débutant';
+  const [workoutSessions, setWorkoutSessions] = useState<any[]>([]);
+  const [weather, setWeather] = useState<any>(null);
 
-  const user = { nom: "Champion", coach: "Dianfe" };
+  useEffect(() => {
+    API.get('/workouts/weather')
+      .then((res: any) => setWeather(res.data))
+      .catch((err: any) => console.error('Erreur météo:', err));
+  }, []);
 
-  return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#0A0A0A', color: 'white', fontFamily: "'Inter', sans-serif" }}>
-      
-      <div style={{ width: '250px', backgroundColor: '#161616', borderRight: '1px solid #333', padding: '30px', display: 'flex', flexDirection: 'column' }}>
-        <h2 style={{ color: '#FF5F00', fontWeight: '900', fontStyle: 'italic', marginBottom: '5px', margin: 0 }}>PERFORATION</h2>
-        <h2 style={{ color: '#FF5F00', fontWeight: '900', fontStyle: 'italic', marginBottom: '50px', margin: 0 }}>DISTAR</h2>
+ return (
+    <div style={{ backgroundColor: '#121212', color: '#fff', minHeight: '100vh' }}>
+      <Header /> {/* <-- Ajoute le header ici */}
+
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '40px 20px' }}>
         
-        <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div 
-            onClick={() => setActiveTab('dashboard')}
-            style={{ cursor: 'pointer', fontWeight: activeTab === 'dashboard' ? 'bold' : 'normal', color: activeTab === 'dashboard' ? '#FF5F00' : '#888' }}
-          >
-            TABLEAU DE BORD
-          </div>
-          <div 
-            onClick={() => setActiveTab('programme')}
-            style={{ cursor: 'pointer', fontWeight: activeTab === 'programme' ? 'bold' : 'normal', color: activeTab === 'programme' ? '#FF5F00' : '#888' }}
-          >
-            MON PROGRAMME
-          </div>
-          <div 
-            onClick={() => setActiveTab('nutrition')}
-            style={{ cursor: 'pointer', fontWeight: activeTab === 'nutrition' ? 'bold' : 'normal', color: activeTab === 'nutrition' ? '#FF5F00' : '#888' }}
-          >
-            NUTRITION
-          </div>
-          <div 
-            onClick={() => setActiveTab('progres')}
-            style={{ cursor: 'pointer', fontWeight: activeTab === 'progres' ? 'bold' : 'normal', color: activeTab === 'progres' ? '#FF5F00' : '#888' }}
-          >
-            MES PROGRÈS
-          </div>
-        </nav>
-
-        <button
-          onClick={() => navigate('/')}
-          style={{ padding: '10px', backgroundColor: 'transparent', border: '1px solid #444', color: '#888', cursor: 'pointer', borderRadius: '4px' }}
-        >
-          Déconnexion
-        </button>
-      </div>
-
-      <div style={{ flex: 1, padding: '40px' }}>
-        
-        {activeTab === 'dashboard' && (
+        {/* En-tête */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '15px',
+          marginBottom: '35px',
+          borderBottom: '1px solid #222',
+          paddingBottom: '20px'
+        }}>
           <div>
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-              <h1 style={{ fontSize: '2rem' }}>Bonjour, <span style={{ color: '#FF5F00' }}>{user.nom}</span> 👋</h1>
-              <div style={{ backgroundColor: '#222', padding: '10px 20px', borderRadius: '30px', border: '1px solid #FF5F00' }}>
-                COACH : {user.coach.toUpperCase()}
-              </div>
-            </header>
+            <h1 style={{ color: '#FF5F00', margin: 0, fontSize: '28px', textTransform: 'uppercase' }}>
+              Espace Client & Performances
+            </h1>
+            <p style={{ color: '#aaa', margin: '5px 0 0 0' }}>
+              Niveau actuel : <strong style={{ color: '#fff' }}>{userLevel.toUpperCase()}</strong>
+            </p>
+          </div>
+          <button
+            onClick={() => navigate('/workouts')}
+            style={{
+              backgroundColor: '#FF5F00',
+              color: '#000',
+              border: 'none',
+              padding: '12px 20px',
+              borderRadius: '8px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            🏋️ VOIR MES SÉANCES
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '4px', marginTop: '40px' }}>
-              <StatCard label="Poids Actuel" value="82 kg" change="-2kg" />
-              <StatCard label="Masse Musculaire" value="41,5 kg" change="+0,5kg" />
-              <StatCard label="Séances (Mois)" value="16" change="+4" />
+            {/* Widget Météo de Dakar */}
+{weather && (
+  <div style={{
+    backgroundColor: '#1c1c1c',
+    border: '1px solid #333',
+    padding: '8px 15px',
+    borderRadius: '8px',
+    fontSize: '14px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
+  }}>
+    <span>🌤️ <strong>{weather.ville} :</strong> {weather.temperature} ({weather.condition})</span>
+  </div>
+)}
+          </button>
+        </div>
+
+        {/* Statistiques clés de l'utilisateur */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: '20px',
+          marginBottom: '35px'
+        }}>
+          <div style={{ backgroundColor: '#1c1c1c', border: '1px solid #333', padding: '20px', borderRadius: '12px' }}>
+            <span style={{ color: '#aaa', fontSize: '14px' }}>Séances complétées</span>
+            <h2 style={{ color: '#FF5F00', fontSize: '32px', margin: '10px 0 0 0' }}>12 / 16</h2>
+          </div>
+          <div style={{ backgroundColor: '#1c1c1c', border: '1px solid #333', padding: '20px', borderRadius: '12px' }}>
+            <span style={{ color: '#aaa', fontSize: '14px' }}>Assiduité</span>
+            <h2 style={{ color: '#FF5F00', fontSize: '32px', margin: '10px 0 0 0' }}>85%</h2>
+          </div>
+          <div style={{ backgroundColor: '#1c1c1c', border: '1px solid #333', padding: '20px', borderRadius: '12px' }}>
+            <span style={{ color: '#aaa', fontSize: '14px' }}>Prochaine séance</span>
+            <h2 style={{ color: '#fff', fontSize: '18px', margin: '10px 0 0 0' }}>Jour 1 : Pectoraux & Triceps</h2>
+          </div>
+        </div>
+
+        {/* Section Séances & Régime */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '25px' }}>
+          
+          <div style={{ backgroundColor: '#1c1c1c', border: '1px solid #333', padding: '25px', borderRadius: '12px' }}>
+            <h3 style={{ color: '#FF5F00', marginTop: 0 }}>🔥 Programme Actif</h3>
+            <p style={{ color: '#ddd', lineHeight: '1.6', fontSize: '15px' }}>
+              Consulte le détail de tes exercices, ajuste tes charges et valide tes séances accomplies au fur et à mesure.
+            </p>
+            <button
+              onClick={() => navigate('/workouts')}
+              style={{
+                width: '100%',
+                backgroundColor: 'transparent',
+                color: '#FF5F00',
+                border: '1px solid #FF5F00',
+                padding: '10px',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                marginTop: '15px'
+              }}
+            >
+              Lancer la séance du jour
+            </button>
+          </div>
+
+          <div style={{ backgroundColor: '#1c1c1c', border: '1px solid #333', padding: '25px', borderRadius: '12px' }}>
+            <h3 style={{ color: '#FF5F00', marginTop: 0 }}>🥗 Suivi Nutrition</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '15px' }}>
+              <span>Objectif Calorique :</span>
+              <strong style={{ color: '#FF5F00' }}>2 400 kcal/jour</strong>
             </div>
-
-            <div style={{ backgroundColor: '#161616', padding: '30px', borderRadius: '15px', border: '1px solid #333', marginTop: '40px' }}>
-              <h3 style={{ marginBottom: '20px', color: '#FF5F00', margin: 0 }}>SÉANCE DU JOUR : POUSSÉE (PECTORAUX / TRICEPS)</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}>
-                <ExerciseItem name="Développé Couché" sets="4 séries x 10 répétitions" />
-                <ExerciseItem name="Dips" sets="3 séries x 12 répétitions" />
-                <ExerciseItem name="Écartés Haltères" sets="3 séries x 15 répétitions" />
-              </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '15px' }}>
+              <span>Protéines recommandées :</span>
+              <strong>160 g</strong>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
+              <span>Hydratation conseillée :</span>
+              <strong>2.5 Litres</strong>
             </div>
           </div>
-        )}
 
-        {activeTab === 'programme' && (
-          <div>
-            <h1 style={{ fontSize: '2rem', marginBottom: '40px' }}>🏋️‍♂️ Mon <span style={{ color: '#FF5F00' }}>Programme d'Entraînement</span></h1>
-            <div style={{ backgroundColor: '#161616', padding: '30px', borderRadius: '15px', border: '1px solid #333' }}>
-              <h3 style={{ color: '#FF5F00', marginTop: 0 }}>Planification Hebdomadaire</h3>
-              <p style={{ color: '#aaa', marginTop: '10px' }}>Retrouve ici la répartition de tes séances programmées par ton entraîneur **{user.coach}**.</p>
-              <div style={{ marginTop: '25px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <div style={{ padding: '15px', backgroundColor: '#222', borderRadius: '8px', borderLeft: '4px solid #FF5F00' }}>
-                  <strong>Lundi :</strong> Poussée (Pectoraux, Épaules, Triceps)
-                </div>
-                <div style={{ padding: '15px', backgroundColor: '#222', borderRadius: '8px', borderLeft: '4px solid #FF5F00' }}>
-                  <strong>Mercredi :</strong> Tirage (Dos, Biceps)
-                </div>
-                <div style={{ padding: '15px', backgroundColor: '#222', borderRadius: '8px', borderLeft: '4px solid #FF5F00' }}>
-                  <strong>Vendredi :</strong> Jambes & Abdos (Squats, Fentes)
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'nutrition' && (
-          <div>
-            <h1 style={{ fontSize: '2rem', marginBottom: '40px' }}>🍏 Suivi <span style={{ color: '#FF5F00' }}>Nutritionnel</span></h1>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
-              <div style={{ backgroundColor: '#161616', padding: '30px', borderRadius: '15px', border: '1px solid #333' }}>
-                <h3 style={{ color: '#FF5F00', marginTop: 0 }}>Objectifs Macro</h3>
-                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <p>🔥 <strong>Calories :</strong> 2 800 kcal / jour</p>
-                  <p>🥩 <strong>Protéines :</strong> 160g</p>
-                  <p>🍚 <strong>Glucides :</strong> 320g</p>
-                  <p>🥑 <strong>Lipides :</strong> 80g</p>
-                </div>
-              </div>
-              <div style={{ backgroundColor: '#161616', padding: '30px', borderRadius: '15px', border: '1px solid #333' }}>
-                <h3 style={{ color: '#FF5F00', marginTop: 0 }}>Plan de Repas Conseil</h3>
-                <p style={{ color: '#aaa', fontSize: '0.9rem' }}>Privilégier les sources de protéines maigres et les glucides complexes avant l'effort.</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'progres' && (
-          <div>
-            <h1 style={{ fontSize: '2rem', marginBottom: '40px' }}>📈 Évolution & <span style={{ color: '#FF5F00' }}>Performances</span></h1>
-            <div style={{ backgroundColor: '#161616', padding: '30px', borderRadius: '15px', border: '1px solid #333' }}>
-              <h3 style={{ color: '#FF5F00', marginTop: 0 }}>Mes Records Personnels (PR)</h3>
-              <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <ExerciseItem name="Développé Couché (Max)" sets="100 kg" />
-                <ExerciseItem name="Squat (Max)" sets="130 kg" />
-                <ExerciseItem name="Soulevé de terre (Max)" sets="150 kg" />
-              </div>
-            </div>
-          </div>
-        )}
+        </div>
 
       </div>
     </div>

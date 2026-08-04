@@ -1,22 +1,24 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/entities/user.entity';
+import { Payment } from './payment.entity';
+import { WorkoutSession } from './workouts/entities/workout.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { WorkoutsModule } from './workouts/workouts.module';
-import { User } from './users/entities/user.entity';
-import { Workout } from './workouts/entities/workout.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',            // <--- On passe en MySQL
+      
+      type: 'mysql',
       host: 'localhost',
-      port: 3306,               // <--- Port standard XAMPP
-      username: 'root',         // <--- Utilisateur par défaut XAMPP
-      password: '',             // <--- Pas de mot de passe par défaut sur XAMPP
-      database: 'distarperf',   // <--- Nom de ta base de données
-      entities: [User, Workout],
-      synchronize: true,        // Crée automatiquement les tables dans MySQL
+      port: 3306,
+      username: 'root',
+      password: '',
+      database: 'distarperf',
+      entities: [User, Payment, WorkoutSession],
+      synchronize: true,
     }),
     UsersModule,
     AuthModule,

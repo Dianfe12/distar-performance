@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 export enum UserRole {
-  ATHLETE = 'ATHLETE',
+  CLIENT = 'CLIENT',
   COACH = 'COACH',
   ADMIN = 'ADMIN',
 }
@@ -11,23 +11,21 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
-  nom!: string;
-
   @Column({ unique: true })
   email!: string;
 
   @Column()
   password!: string;
 
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.ATHLETE })
+  @Column({ nullable: true })
+  nom?: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.CLIENT,
+  })
   role!: UserRole;
-
-  @Column({ type: 'float', nullable: true })
-  poids?: number;
-
-  @Column({ type: 'float', nullable: true })
-  masseMusculaire?: number;
 
   @CreateDateColumn()
   createdAt!: Date;

@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Workout } from './entities/workout.entity';
+import { WorkoutSession } from './entities/workout.entity';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class WorkoutsService {
   constructor(
-    @InjectRepository(Workout)
-    private readonly workoutRepository: Repository<Workout>,
+    @InjectRepository(WorkoutSession)
+    private readonly workoutRepository: Repository<WorkoutSession>,
   ) {}
 
-  async create(createWorkoutDto: CreateWorkoutDto, user: User): Promise<Workout> {
+  async create(createWorkoutDto: CreateWorkoutDto, user: User): Promise<WorkoutSession> {
     const workout = this.workoutRepository.create({
       ...createWorkoutDto,
       user,
@@ -20,14 +20,14 @@ export class WorkoutsService {
     return await this.workoutRepository.save(workout);
   }
 
-  async findAllByUser(userId: string): Promise<Workout[]> {
+  async findAllByUser(userId: string): Promise<WorkoutSession[]> {
     return await this.workoutRepository.find({
       where: { user: { id: userId } },
       order: { createdAt: 'DESC' },
     });
   }
 
-  async findOne(id: string): Promise<Workout> {
+  async findOne(id: string): Promise<WorkoutSession> {
   const workout = await this.workoutRepository.findOne({
     where: { id },
     relations: { user: true },

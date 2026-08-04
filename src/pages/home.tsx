@@ -16,6 +16,8 @@ import imgSechepertepoids from "../assets/sechepertepoids.png";
 import imgAlimentation from "../assets/aliments.png";
 import imgMuscle from "../assets/muscles.png";
 import imgHoraires from "../assets/horaires.png";
+import { useNavigate } from 'react-router-dom';
+
 const SERVICES_DATA = [
   { 
     id: 'seche', 
@@ -79,6 +81,7 @@ const handlePostuler = (e: React.FormEvent) => {
     gray: '#161616',
     white: '#FFFFFF'
   };
+  const navigate = useNavigate();
 
   return (
     <div style={{ backgroundColor: theme.black, color: theme.white, fontFamily: "'Inter', sans-serif" }}>
@@ -102,18 +105,33 @@ const handlePostuler = (e: React.FormEvent) => {
         <div style={{ fontWeight: '900', fontSize: '1.8rem', fontStyle: 'italic' }}>
           DISTAR<span style={{ color: theme.orange }}>PERF</span>
         </div>
-        <div style={{ display: 'flex', gap: '25px', alignItems: 'center', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase' }}>
-  <a href="#methode" style={{ color: 'white', textDecoration: 'none' }}>La Méthode</a>
+       <div style={{ display: 'flex', gap: '25px', alignItems: 'center', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase' }}>
   <a href="#resultats" style={{ color: 'white', textDecoration: 'none' }}>Résultats</a>
   <a href="#equipe" style={{ color: 'white', textDecoration: 'none' }}>L'Équipe</a>
-  
-  {/* On remplace la ligne 104 par ce bouton */}
+
+  {/* Bouton ADMIN vers la vraie route /admin */}
   <button 
-    onClick={() => window.location.href='/login'}
-    style={{ 
-      color: theme.orange, 
+    onClick={() => navigate('/admin')}
+    style={{
+      color: theme.orange,
       backgroundColor: 'transparent',
-      border: `1px solid ${theme.orange}`, 
+      border: 'none',
+      cursor: 'pointer',
+      fontWeight: '700',
+      fontSize: '0.8rem',
+      textTransform: 'uppercase'
+    }}
+  >
+    ADMIN
+  </button>
+
+  {/* Bouton CONNEXION vers /login */}
+  <button 
+    onClick={() => navigate('/login')}
+    style={{
+      color: theme.orange,
+      backgroundColor: 'transparent',
+      border: `1px solid ${theme.orange}`,
       padding: '8px 15px',
       cursor: 'pointer',
       fontWeight: '700',

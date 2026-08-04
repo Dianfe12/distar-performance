@@ -1,13 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WorkoutsService } from './workouts.service';
+import { HttpModule } from '@nestjs/axios';
+import { WorkoutSession } from './entities/workout.entity';
 import { WorkoutsController } from './workouts.controller';
-import { Workout } from './entities/workout.entity';
+import { WorkoutsService } from './workouts.service';
+import { WeatherService } from '../external-api/weather.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Workout])],
+  imports: [
+    TypeOrmModule.forFeature([WorkoutSession]),
+    HttpModule,
+  ],
   controllers: [WorkoutsController],
-  providers: [WorkoutsService],
+  providers: [WorkoutsService, WeatherService],
   exports: [WorkoutsService],
 })
 export class WorkoutsModule {}
